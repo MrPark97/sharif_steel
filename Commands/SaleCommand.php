@@ -67,7 +67,7 @@ class SaleCommand extends UserCommand
             ['text' => '6', 'callback_data' => 'sale_category_6'],
         ], [
             ['text' => '7', 'callback_data' => 'sale_category_7'],
-            ['text' => 'Все категории', 'callback_data' => 'sale_category_full'],
+            ['text' => 'Все категории', 'callback_data' => 'sale_category_0'],
         ]);
 
         return $this->replyToChat('Выберите категорию', [
