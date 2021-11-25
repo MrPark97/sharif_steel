@@ -45,7 +45,16 @@ try {
     if ($server_response->isOk()) {
         $results = $server_response->getResult();
         $update_count = count($results);
-        // print_r($results);
+        foreach($results as $result) {
+            $cq = $result->getCallbackQuery();
+            if($cq != null) {
+                $cq_data = $cq->getData();
+                if(strpos($cq_data, "sale_category") === 0) {
+                    $sale_category = substr($cq_data, mb_strlen("sale_category_"));
+                    print($sale_category);
+                }
+            }
+        }
         echo date('Y-m-d H:i:s') . ' - Processed ' . $update_count . ' updates';
     } else {
         echo date('Y-m-d H:i:s') . ' - Failed to fetch updates' . PHP_EOL;

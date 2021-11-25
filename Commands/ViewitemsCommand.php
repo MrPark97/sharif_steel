@@ -33,10 +33,23 @@ class ViewitemsCommand extends UserCommand
         // and somewhere later:
         $all_items = '';
         foreach ($data as $row) {
-            if ($row['id'] % 1000 == 1) {
-                $all_items .= "\n";
+            $cur_row = "";
+
+            if ($row['id'] % 1000 == 1 && $row['id'] != 1001) {
+                $cur_row .= "\n";
             }
-            $all_items .=  $row['id'] . ". " . $row['name'] . "\n";
+
+            $cur_row .= $row['id'] . ". " . $row['name'] . "\n";
+            
+            $border = mb_strlen($all_items)%4096;
+            if(($border + mb_strlen($cur_row)) > 4096) {
+                $border = 4096-$border;
+                for($i=0; $i<$border; $i++) {
+                    $all_items .= ' ';
+                }
+            }
+            $all_items .=  $cur_row;
+            
         }
 
         $data = [                                  // Set up the new message data
