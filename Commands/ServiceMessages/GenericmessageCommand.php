@@ -49,7 +49,6 @@ class GenericmessageCommand extends SystemCommand
     public function execute(): ServerResponse
     {
         $message = $this->getMessage();
-
         /**
          * Catch and handle any service messages here.
          */

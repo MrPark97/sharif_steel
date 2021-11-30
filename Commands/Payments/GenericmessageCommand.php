@@ -50,6 +50,14 @@ class GenericmessageCommand extends SystemCommand
         $message = $this->getMessage();
         $user_id = $message->getFrom()->getId();
 
+        if($reply_to_message = $message->getReplyToMessage()) {
+            if($reply_to_message_text = $reply_to_message->getText()) {
+                if($reply_to_message_text == 'Напишите комментарий') {
+                    
+                }
+            }
+        }
+
         // Handle successful payment
         if ($payment = $message->getSuccessfulPayment()) {
             return PaymentCommand::handleSuccessfulPayment($payment, $user_id);

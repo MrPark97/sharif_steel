@@ -45,13 +45,7 @@ try {
     if ($server_response->isOk()) {
         $results = $server_response->getResult();
         $update_count = count($results);
-        foreach($results as $result) {
-            $cq = $result->getCallbackQuery();
-            if($cq != null) {
-                $cq_data = $cq->getData();
-                
-            }
-        }
+        
         echo date('Y-m-d H:i:s') . ' - Processed ' . $update_count . ' updates';
     } else {
         echo date('Y-m-d H:i:s') . ' - Failed to fetch updates' . PHP_EOL;

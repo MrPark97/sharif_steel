@@ -56,4 +56,52 @@ function searchResults($searchRequest) {
     return $results;
 }
 
+function isValidId($id):bool {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT * FROM sharif_items WHERE id=(:id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':id' => $id));
+    $results = $sth->fetchAll();
+    if(count($results) != 1)
+        return false;
+    return true;
+}
+
+function insertItem($user_id, $id, $amount) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "INSERT INTO sharif_temp_sales (user_id, item_id, item_amount) VALUES((:user_id), (:id), (:amount))";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':user_id'=>$user_id, ':id' => $id, ':amount'=>$amount));
+}
+
+function updateItemCash($user_id, $is_cash) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "UPDATE sharif_temp_sales SET is_cash=(:is_cash) WHERE user_id=(:user_id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':is_cash'=>$is_cash, ':user_id'=>$user_id));
+}
+
+function updateItemPaid($user_id, $is_paid) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "UPDATE sharif_temp_sales SET is_paid=(:is_paid) WHERE user_id=(:user_id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':is_paid'=>$is_paid, ':user_id'=>$user_id));
+}
+
 ?>

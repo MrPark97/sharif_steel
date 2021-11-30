@@ -74,6 +74,7 @@ class GenericmessageCommand extends SystemCommand
             $message->getFrom()->getId(),
             $message->getChat()->getId()
         );
+        
 
         // Fetch conversation command if it exists and execute it.
         if ($conversation->exists() && $command = $conversation->getCommand()) {
