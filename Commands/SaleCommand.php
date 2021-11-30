@@ -68,6 +68,7 @@ class SaleCommand extends UserCommand
         ], [
             ['text' => '7', 'callback_data' => 'sale_category_7'],
             ['text' => 'Все категории', 'callback_data' => 'sale_category_0'],
+            ['text' => '🔍 Поиск', 'switch_inline_query_current_chat' => ''],
         ]);
 
         return $this->replyToChat('Выберите категорию', [

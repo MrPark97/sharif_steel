@@ -43,4 +43,17 @@ function getItems(int $category = 0) {
     return $all_items;
 }
 
+function searchResults($searchRequest) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT * FROM sharif_items WHERE name LIKE (:search) LIMIT 10";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':search' => "%$searchRequest%"));
+    $results = $sth->fetchAll();
+    return $results;
+}
+
 ?>

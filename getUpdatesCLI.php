@@ -18,7 +18,6 @@
 
 // Load composer
 require_once __DIR__ . '/vendor/autoload.php';
-require_once "utils.php";
 
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Entities\Chat;
@@ -50,10 +49,7 @@ try {
             $cq = $result->getCallbackQuery();
             if($cq != null) {
                 $cq_data = $cq->getData();
-                if(strpos($cq_data, "sale_category") === 0) {
-                    $sale_category = substr($cq_data, mb_strlen("sale_category_"));
-                    print(getItems(intval($sale_category)));
-                }
+                
             }
         }
         echo date('Y-m-d H:i:s') . ' - Processed ' . $update_count . ' updates';
