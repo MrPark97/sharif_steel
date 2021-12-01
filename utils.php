@@ -3,7 +3,7 @@
 
 // Load all configuration options
 /** @var array $config */
-$config = require __DIR__ . '/config.php';
+$config = require_once __DIR__ . '/config.php';
 
 function getItems(int $category = 0) {
     global $config;
@@ -102,6 +102,19 @@ function updateItemPaid($user_id, $is_paid) {
     $sql = "UPDATE sharif_temp_sales SET is_paid=(:is_paid) WHERE user_id=(:user_id)";
     $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $sth->execute(array(':is_paid'=>$is_paid, ':user_id'=>$user_id));
+}
+
+function getTempSaleData($user_id) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT * FROM sharif_temp_sales JOIN sharif_items ON sharif_temp_sales.item_id=sharif_items.id WHERE user_id=(:user_id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':user_id' => $user_id));
+    
+    return $sth->fetch();
 }
 
 ?>

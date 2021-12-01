@@ -21,7 +21,7 @@ class GrantadminCommand extends UserCommand
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
         $message_text = $message->text;
-        $username = mb_substr($message_text,19);   // 19 - длина названия комманды
+        $username = mb_substr($message_text,mb_strlen($this->usage)+1);   // 19 - длина названия комманды
         $answer_text = "Роль администратора $username выдана";
 
         try {

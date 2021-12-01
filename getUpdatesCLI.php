@@ -26,7 +26,7 @@ use Longman\TelegramBot\Request;
 
 // Load all configuration options
 /** @var array $config */
-$config = require __DIR__ . '/config.php';
+$config = require_once __DIR__ . '/config.php';
 
 try {
     // Create Telegram API object

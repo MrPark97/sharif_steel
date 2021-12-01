@@ -23,6 +23,11 @@ use Longman\TelegramBot\Commands\UserCommands\PaymentCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
 
+require_once "utils.php";
+require_once "Models/SaleItem.php";
+
+use Models\SaleItem;
+
 class GenericmessageCommand extends SystemCommand
 {
     /**
@@ -48,12 +53,16 @@ class GenericmessageCommand extends SystemCommand
     public function execute(): ServerResponse
     {
         $message = $this->getMessage();
-        $user_id = $message->getFrom()->getId();
+        $from = $message->getFrom();
+        $user_id = $from->getId();
+        $username = "@".$from->getUsername();
 
         if($reply_to_message = $message->getReplyToMessage()) {
             if($reply_to_message_text = $reply_to_message->getText()) {
                 if($reply_to_message_text == 'Напишите комментарий') {
-                    
+                    $tempSaleData = getTempSaleData($user_id);
+                    $saleItem = new SaleItem($tempSaleData, $username, $message->getDate(), $message->getText());
+                    $saleItem->saveData();
                 }
             }
         }
