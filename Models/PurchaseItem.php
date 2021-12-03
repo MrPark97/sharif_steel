@@ -6,12 +6,11 @@ use PDO;
 /** @var array $config */
 $config = require_once 'config.php';
 
-class SaleItem {
+class PurchaseItem {
     private int $user_id;
     private int $amount;
     private int $id;
     private string $comment;
-    private string $username;
     private bool $is_cash;
     private bool $is_paid;
     private string $date_ts;
@@ -19,20 +18,21 @@ class SaleItem {
     private string $name;
     private float $cost;
     private int $warehouse_amount;
+    private float $old_cost;
 
-    public function __construct($tempSaleData, string $username, string $date, string $comment="") {
-        $this->user_id = $tempSaleData['user_id'];
-        $this->username = $username;
-        $this->amount = $tempSaleData['item_amount'];
-        $this->id = $tempSaleData['item_id'];
-        $this->is_cash = $tempSaleData['is_cash'];
-        $this->is_paid = $tempSaleData['is_paid'];
+    public function __construct($tempPurchaseData, string $date, string $comment="") {
+        $this->user_id = $tempPurchaseData['user_id'];
+        $this->amount = $tempPurchaseData['item_amount'];
+        $this->id = $tempPurchaseData['item_id'];
+        $this->is_cash = $tempPurchaseData['is_cash'];
+        $this->is_paid = $tempPurchaseData['is_paid'];
         $this->comment = $comment;
         $this->date_ts = $date;
         $this->date = date("d/m/y", $date);
-        $this->name = $tempSaleData['name'];
-        $this->cost = floatval($tempSaleData['price_per_unit'])*($this->amount);
-        $this->warehouse_amount = $tempSaleData['amount'];
+        $this->name = $tempPurchaseData['name'];
+        $this->cost = $tempPurchaseData['item_cost'];
+        $this->warehouse_amount = $tempPurchaseData['amount'];
+        $this->old_cost = $tempPurchaseData['price'];
     }
 
     public function createFile($directory, $filename) {
@@ -68,11 +68,15 @@ class SaleItem {
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = "UPDATE sharif_items SET amount=(:amount) WHERE id=(:id)";
+        $sql = "UPDATE sharif_items SET amount=(:amount), price_per_unit=(:price_per_unit), price=(:price) WHERE id=(:id)";
         $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array(':amount'=>($this->warehouse_amount - $this->amount), ':id'=>$this->id));
 
-        $sql = "DELETE FROM sharif_temp_sales WHERE user_id=(:user_id)";
+        $amount = $this->warehouse_amount + $this->amount;
+        $price = $this->cost+$this->old_cost;
+        $price_per_unit = $price/$amount;
+        $sth->execute(array(':amount'=>$amount, ':price_per_unit'=>$price_per_unit, ':price'=>$price, ':id'=>$this->id));
+
+        $sql = "DELETE FROM sharif_temp_purchases WHERE user_id=(:user_id)";
         $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array(':user_id'=>$this->user_id));
     }
@@ -95,7 +99,7 @@ class SaleItem {
             mkdir($cur_dir);
         }
 
-        $filename = "user_sales_".mb_substr($this->username, 1).".csv";
+        $filename = "purchases.csv";
 
         if(!file_exists($cur_dir."/".$filename)) {
             $this->createFile($cur_dir, $filename);

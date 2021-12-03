@@ -30,22 +30,22 @@ use Longman\TelegramBot\Exception\TelegramException;
 
 require_once "utils.php";
 
-class SaleCommand extends UserCommand
+class PurchaseCommand extends UserCommand
 {
     /**
      * @var string
      */
-    protected $name = 'sale';
+    protected $name = 'purchase';
 
     /**
      * @var string
      */
-    protected $description = 'Sale item';
+    protected $description = 'Purchase item';
 
     /**
      * @var string
      */
-    protected $usage = '/sale';
+    protected $usage = '/purchase';
 
     /**
      * @var string
@@ -74,29 +74,32 @@ class SaleCommand extends UserCommand
         ];
         
         if(mb_strlen($message_text) != mb_strlen($this->usage)) {
-            $cleaned_sale_params = array();
-            $sale_params = explode(' ', $clean_msg_text);
+            $cleaned_purchase_params = array();
+            $purchase_params = explode(' ', $clean_msg_text);
 
-            print_r($sale_params);
-            foreach($sale_params as $sale_param) {
-                if($sale_param != "") {
-                    $int_sale_param = intval($sale_param);
-                    if($int_sale_param > 0) {
-                        array_push($cleaned_sale_params, $int_sale_param);
+            print_r($purchase_params);
+            foreach($purchase_params as $purchase_param) {
+                if($purchase_param != "") {
+                    $int_purchase_param = intval($purchase_param);
+                    if($int_purchase_param > 0 && count($cleaned_purchase_params) < 2) {
+                        array_push($cleaned_purchase_params, $int_purchase_param);
+                    } else if(count($cleaned_purchase_params) == 2) {
+                        array_push($cleaned_purchase_params, floatval(str_replace(',', '.', $purchase_param)));
                     } else {
                         return Request::sendDice($error_data);
                     }
                 }
             }
-            if(count($cleaned_sale_params) == 2) {
-                $item_id = $cleaned_sale_params[0];
-                $item_amount = $cleaned_sale_params[1];
+            if(count($cleaned_purchase_params) == 3) {
+                $item_id = $cleaned_purchase_params[0];
+                $item_amount = $cleaned_purchase_params[1];
+                $item_cost = $cleaned_purchase_params[2];
                 if(isValidId($item_id)) {
-                    saleItem($user_id, $item_id, $item_amount);
+                    purchaseItem($user_id, $item_id, $item_amount, $item_cost);
 
                     $inline_keyboard = new InlineKeyboard([
-                        ['text' => 'Наличные', 'callback_data' => 'sale_item_cash_1'],
-                        ['text' => 'Перечислением', 'callback_data' => 'sale_item_cash_0'],
+                        ['text' => 'Наличные', 'callback_data' => 'purchase_item_cash_1'],
+                        ['text' => 'Перечислением', 'callback_data' => 'purchase_item_cash_0'],
                     ]);
                     
                     return $this->replyToChat('Выберите метод оплаты:', [

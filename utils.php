@@ -71,7 +71,7 @@ function isValidId($id):bool {
     return true;
 }
 
-function insertItem($user_id, $id, $amount) {
+function saleItem($user_id, $id, $amount) {
     global $config;
     $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
     // set the PDO error mode to exception
@@ -82,7 +82,7 @@ function insertItem($user_id, $id, $amount) {
     $sth->execute(array(':user_id'=>$user_id, ':id' => $id, ':amount'=>$amount));
 }
 
-function updateItemCash($user_id, $is_cash) {
+function updateSaleCash($user_id, $is_cash) {
     global $config;
     $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
     // set the PDO error mode to exception
@@ -93,7 +93,7 @@ function updateItemCash($user_id, $is_cash) {
     $sth->execute(array(':is_cash'=>$is_cash, ':user_id'=>$user_id));
 }
 
-function updateItemPaid($user_id, $is_paid) {
+function updateSalePaid($user_id, $is_paid) {
     global $config;
     $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
     // set the PDO error mode to exception
@@ -111,6 +111,52 @@ function getTempSaleData($user_id) {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $sql = "SELECT * FROM sharif_temp_sales JOIN sharif_items ON sharif_temp_sales.item_id=sharif_items.id WHERE user_id=(:user_id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':user_id' => $user_id));
+    
+    return $sth->fetch();
+}
+
+function purchaseItem($user_id, $id, $amount, $cost) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "INSERT INTO sharif_temp_purchases (user_id, item_id, item_amount, item_cost) VALUES((:user_id), (:id), (:amount), (:cost))";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':user_id'=>$user_id, ':id' => $id, ':amount'=>$amount, ':cost'=>$cost));
+}
+
+function updatePurchaseCash($user_id, $is_cash) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "UPDATE sharif_temp_purchases SET is_cash=(:is_cash) WHERE user_id=(:user_id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':is_cash'=>$is_cash, ':user_id'=>$user_id));
+}
+
+function updatePurchasePaid($user_id, $is_paid) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "UPDATE sharif_temp_purchases SET is_paid=(:is_paid) WHERE user_id=(:user_id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':is_paid'=>$is_paid, ':user_id'=>$user_id));
+}
+
+function getTempPurchaseData($user_id) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT * FROM sharif_temp_purchases JOIN sharif_items ON sharif_temp_purchases.item_id=sharif_items.id WHERE user_id=(:user_id)";
     $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $sth->execute(array(':user_id' => $user_id));
     
