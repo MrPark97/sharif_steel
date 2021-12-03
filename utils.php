@@ -163,4 +163,28 @@ function getTempPurchaseData($user_id) {
     return $sth->fetch();
 }
 
+function bookItem($user_id, $id, $amount) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "INSERT INTO sharif_temp_reservations (user_id, item_id, item_amount) VALUES((:user_id), (:id), (:amount))";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':user_id'=>$user_id, ':id' => $id, ':amount'=>$amount));
+}
+
+function getTempBookData($user_id) {
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT * FROM sharif_temp_reservations JOIN sharif_items ON sharif_temp_reservations.item_id=sharif_items.id WHERE user_id=(:user_id)";
+    $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(':user_id' => $user_id));
+    
+    return $sth->fetch();
+}
+
 ?>

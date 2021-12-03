@@ -26,9 +26,11 @@ use Longman\TelegramBot\Request;
 require_once "utils.php";
 require_once "Models/SaleItem.php";
 require_once "Models/PurchaseItem.php";
+require_once "Models/BookItem.php";
 
 use Models\SaleItem;
 use Models\PurchaseItem;
+use Models\BookItem;
 
 class GenericmessageCommand extends SystemCommand
 {
@@ -69,6 +71,10 @@ class GenericmessageCommand extends SystemCommand
                     $tempPurchaseData = getTempPurchaseData($user_id);
                     $purchaseItem = new PurchaseItem($tempPurchaseData, $message->getDate(), $message->getText());
                     $purchaseItem->saveData();
+                } else if($reply_to_message_text == 'Напишите комментарий для бронирования') {
+                    $tempBookData = getTempBookData($user_id);
+                    $bookItem = new BookItem($tempBookData, $username, $message->getDate(), $message->getText());
+                    $bookItem->saveData();
                 }
             }
         }
