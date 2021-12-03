@@ -53,7 +53,7 @@ class BookItem {
 
         $sql = "UPDATE sharif_items SET booked=(:booked) WHERE id=(:id)";
         $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array(':booked'=>($this->booked - $this->amount), ':id'=>$this->id));
+        $sth->execute(array(':booked'=>($this->booked + $this->amount), ':id'=>$this->id));
 
         $sql = "DELETE FROM sharif_temp_reservations WHERE user_id=(:user_id)";
         $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
