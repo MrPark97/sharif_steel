@@ -20,6 +20,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use PDO;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
@@ -27,6 +28,10 @@ use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
 
 require_once "utils.php";
+
+// Load all configuration options
+/** @var array $config */
+$config = require_once 'config.php';
 
 class CallbackqueryCommand extends SystemCommand
 {
@@ -53,6 +58,7 @@ class CallbackqueryCommand extends SystemCommand
      */
     public function execute(): ServerResponse
     {
+        global $config;
         // Callback query data can be fetched and handled accordingly.
         $callback_query = $this->getCallbackQuery();
         $callback_data  = $callback_query->getData();
@@ -124,6 +130,45 @@ class CallbackqueryCommand extends SystemCommand
                 'chat_id' => $chat_id,
                 'text'    => 'Напишите комментарий для прихода',
                 'reply_markup' => Keyboard::forceReply(),
+            ];
+
+            return Request::sendMessage($data);
+        } else if(strpos($callback_data, "unbook") === 0) {
+            $params = explode(' ',$callback_data);
+            $ts = $params[1];
+            $filename = $params[2];
+
+            $dir = $config['data_directory'].'/'.date("Y/F/d", $ts);
+
+            $table = fopen($dir.'/'.$filename,'r');
+            $temp_table = fopen($dir.'/'.$ts.'_temp.csv','w');
+            $unbook_item_id = 0;
+            $unbook_amount = 0;
+
+            while(($data = fgetcsv($table, 0, ';')) !== false) {
+                if($data[0] == $ts){ // this is if you need the first column in a row
+                    $unbook_item_id = $data[1];
+                    $unbook_amount = $data[4];
+                    continue;
+                }
+                fputcsv($temp_table, $data, ';');
+            }
+            fclose($table);
+            fclose($temp_table);
+            rename($dir.'/'.$ts.'_temp.csv', $dir.'/'.$filename);
+
+            $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $sql = "UPDATE sharif_items SET booked=booked-(:booked) WHERE id=(:id)";
+            $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $sth->execute(array(':id'=>$unbook_item_id, ':booked'=>$unbook_amount));
+
+
+            $data = [
+                'chat_id' => $chat_id,
+                'text'    => 'Успешно снято с брони',
             ];
 
             return Request::sendMessage($data);
