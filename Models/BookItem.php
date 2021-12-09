@@ -30,7 +30,7 @@ class BookItem {
     }
 
     public function createFile($directory, $filename) {
-        $header_text = "ID;Номенклатура;Дата записи;Количество (кг);Комментарий\n";
+        $header_text = "TS;ID;Номенклатура;Дата записи;Количество (кг);Комментарий\n";
         $header_text = iconv("UTF-8", "windows-1251//IGNORE", $header_text);
         file_put_contents($directory.'/'.$filename, $header_text);
         print($filename);
@@ -38,7 +38,7 @@ class BookItem {
 
     public function writeData($directory, $filename) {
         $clean_comment = str_replace(';', ',', $this->comment);
-        $raw_data = $this->id.';'.$this->name.';'.$this->date.';'.$this->amount;
+        $raw_data = $this->date_ts.';'.$this->id.';'.$this->name.';'.$this->date.';'.$this->amount;
         
         $raw_data .= ';'.$clean_comment."\n";
         $raw_data = iconv("UTF-8", "windows-1251//IGNORE", $raw_data);

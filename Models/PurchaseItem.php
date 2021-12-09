@@ -36,7 +36,7 @@ class PurchaseItem {
     }
 
     public function createFile($directory, $filename) {
-        $header_text = "ID;Номенклатура;Дата записи;Количество (кг);Стоимость;Форма оплаты;Статус оплаты;Комментарий\n";
+        $header_text = "TS;ID;Номенклатура;Дата записи;Количество (кг);Стоимость;Форма оплаты;Статус оплаты;Комментарий\n";
         $header_text = iconv("UTF-8", "windows-1251//IGNORE", $header_text);
         file_put_contents($directory.'/'.$filename, $header_text);
         print($filename);
@@ -44,7 +44,7 @@ class PurchaseItem {
 
     public function writeData($directory, $filename) {
         $clean_comment = str_replace(';', ',', $this->comment);
-        $raw_data = $this->id.';'.$this->name.';'.$this->date.';'.$this->amount.';'.$this->cost;
+        $raw_data = $this->date_ts.';'.$this->id.';'.$this->name.';'.$this->date.';'.$this->amount.';'.$this->cost;
         if($this->is_cash) {
             $raw_data .= ';Наличные';
         } else {
