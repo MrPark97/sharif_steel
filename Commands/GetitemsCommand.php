@@ -31,7 +31,7 @@ class GetitemsCommand extends UserCommand
         // Load all configuration options
         /** @var array $config */
         $config = require __DIR__ . '/../config.php';
-        $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+        $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $data = $conn->query("SELECT * FROM sharif_waiting_roles WHERE username='$username'")->fetchAll();
