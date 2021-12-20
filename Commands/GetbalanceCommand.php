@@ -39,7 +39,7 @@ class GetbalanceCommand extends UserCommand
 
         $data = [                                  // Set up the new message data
             'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-            'document'=> Request::encodeFile('C:/xampp/htdocs/sharif_steel/'.$balance->getFilename()),
+            'document'=> Request::encodeFile($balance->getFilename()),
         ];
 
         return Request::sendDocument($data);        // Send message!

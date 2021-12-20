@@ -13,15 +13,15 @@ use Longman\TelegramBot\Entities\ServerResponse;
 /** @var array $config */
 $config = require __DIR__ . '/../config.php';
 require_once "utils.php";
-require_once "Models/Sales.php";
+require_once "Models/Purchases.php";
 
-use Models\Sales;
+use Models\Purchases;
 
-class GetsalesCommand extends UserCommand
+class GetpurchasesCommand extends UserCommand
 {
-    protected $name = 'getsales';                      // Your command's name
-    protected $description = 'Get sales';              // Your command description
-    protected $usage = '/getsales';                    // Usage of your command
+    protected $name = 'getpurchases';                      // Your command's name
+    protected $description = 'Get purchases';              // Your command description
+    protected $usage = '/getpurchases';                    // Usage of your command
     protected $version = '1.0.0';                      // Version of your command
 
     public function execute(): ServerResponse
@@ -32,31 +32,31 @@ class GetsalesCommand extends UserCommand
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
         $from = $message->getFrom();
         $user_id = $from->getId();
-        $clean_username = $from->getUsername();
+        $username = "@".$from->getUsername();
         $name = $from->getFirstName();
         $message_text = $message->text;
         $clean_msg_text = mb_substr($message_text, mb_strlen($this->usage)+1);
 
         if(mb_strlen($message_text) != mb_strlen($this->usage)) {
-            $cleaned_sales_params = array();
-            $sales_params = explode(' ', $clean_msg_text);
+            $cleaned_purchases_params = array();
+            $purchases_params = explode(' ', $clean_msg_text);
 
-            foreach($sales_params as $sales_param) {
-                if($sales_param != "") {
-                    array_push($cleaned_sales_params, $sales_param);
+            foreach($purchases_params as $purchases_param) {
+                if($purchases_param != "") {
+                    array_push($cleaned_purchases_params, $purchases_param);
                 }
             }
-            if(count($cleaned_sales_params) == 1) {
-                $sales_date = $cleaned_sales_params[0];
-                if(validateDate($sales_date)) {
-                    $sales = new Sales($sales_date, $clean_username, true);
-                    if($sales->getFilename() == "") {
+            if(count($cleaned_purchases_params) == 1) {
+                $purchases_date = $cleaned_purchases_params[0];
+                if(validateDate($purchases_date)) {
+                    $purchases = new Purchases($purchases_date, true);
+                    if($purchases->getFilename() == "") {
                         return Request::emptyResponse();
                     }
-                    print($sales->getFilename());
+                    print($purchases->getFilename());
                     $data = [                                  // Set up the new message data
                         'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-                        'document'=> Request::encodeFile($sales->getFilename()),
+                        'document'=> Request::encodeFile($purchases->getFilename()),
                     ];
             
                     return Request::sendDocument($data);        // Send message!
@@ -70,13 +70,13 @@ class GetsalesCommand extends UserCommand
             }
         }
 
-        $sales = new Sales(date("d.m.Y"), $clean_username, true);
-        if($sales->getFilename() == "") {
+        $purchases = new Purchases(date("d.m.Y"), false);
+        if($purchases->getFilename() == "") {
             return Request::emptyResponse();
         }
         $data = [                                  // Set up the new message data
             'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-            'document'=> Request::encodeFile($sales->getFilename()),
+            'document'=> Request::encodeFile($purchases->getFilename()),
         ];
 
         return Request::sendDocument($data);        // Send message!
