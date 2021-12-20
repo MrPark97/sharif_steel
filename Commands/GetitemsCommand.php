@@ -71,7 +71,7 @@ class GetitemsCommand extends UserCommand
 
         foreach ($data as $row) {
             $row_content = $row['id'].';'.$row['name']."\n";
-            $row_content = iconv("UTF-8", "windows-1251//IGNORE", $row_content);
+            $row_content = iconv("UTF-8", "UTF-8//IGNORE", $row_content);
             file_put_contents('test.csv', $row_content, FILE_APPEND);
         }
         
