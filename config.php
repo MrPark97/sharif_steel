@@ -35,7 +35,7 @@ return [
 
     // When using the getUpdates method, this can be commented out
     'webhook'      => [
-        'url' => 'https://sharif-steel.herokuapp.com/hook-or-manager.php',
+        'url' => 'https://sharif-steel.herokuapp.com/hook.php',
         // Use self-signed certificate
         // 'certificate'     => __DIR__ . '/path/to/your/certificate.crt',
         // Limit maximum number of connections
