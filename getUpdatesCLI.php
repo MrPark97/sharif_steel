@@ -39,6 +39,7 @@ try {
     $telegram->setDownloadPath($config['paths']['download']);
     $telegram->addCommandsPaths($config['commands']['paths']);
     //$telegram->enableMySql($config['mysql']);
+    $telegram->useGetUpdatesWithoutDatabase();
     // Handle telegram getUpdates request
     $server_response = $telegram->handleGetUpdates();
 
