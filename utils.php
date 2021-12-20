@@ -187,6 +187,29 @@ function getTempBookData($user_id) {
     return $sth->fetch();
 }
 
+function validateDate($date, $format = 'd.m.Y'){
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) === $date;
+}
+
+function getMonthName($month) {
+    $monthNames = [
+        '01' => 'January',
+        '02' => 'February',
+        '03' => 'March',
+        '04' => 'April',
+        '05' => 'May',
+        '06' => 'June',
+        '07' => 'July',
+        '08' => 'August',
+        '09' => 'September',
+        '10' => 'October',
+        '11' => 'November',
+        '12' => 'December',
+    ];
+    return $monthNames[$month];
+}
+
 function getMonths() {
     $months = array(
         'January',
