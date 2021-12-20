@@ -78,7 +78,7 @@ class GetitemsCommand extends UserCommand
 
         $data = [                                  // Set up the new message data
             'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-            'document'=> Request::encodeFile('/Users/evgeniypak/Sites/example/test.csv'),
+            'document'=> Request::encodeFile('test.csv'),
         ];
 
         return Request::sendDocument($data);        // Send message!
