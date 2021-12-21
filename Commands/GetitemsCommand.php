@@ -31,17 +31,12 @@ class GetitemsCommand extends UserCommand
         $user_role = getUserRole($username, $user_id);
         
         if($user_role != 1) {
-            $data = [                                  // Set up the new message data
-                'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-                'text'=> 'Не имеешь права',
-            ];
-
-            return Request::sendMessage($data); 
+            return Request::emptyResponse(); 
         }
 
         // set the PDO error mode to exception
         file_put_contents('test.csv', "ID;name\n",);
-        $data = $conn->query("SELECT * FROM sharif_items ORDER BY id")->fetchAll();
+        $data = getItemsFromDB();
         $array_id_and_name = [];
 
         foreach ($data as $row) {

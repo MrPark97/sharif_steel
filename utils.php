@@ -5,7 +5,7 @@
 /** @var array $config */
 $config = require_once __DIR__ . '/config.php';
 
-function getItems(int $category = 0) {
+function getItemsFromDB(int $category = 0) {
     global $config;
     $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
     // set the PDO error mode to exception
@@ -18,6 +18,12 @@ function getItems(int $category = 0) {
     }
 
     $data = $conn->query($sql)->fetchAll();
+    return $data;
+}
+
+function getItems(int $category = 0) {
+    $data = getItemsFromDB($category);
+
     // and somewhere later:
     $all_items = '';
     foreach ($data as $row) {
