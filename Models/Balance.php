@@ -7,31 +7,35 @@ use PDO;
 $config = require_once 'config.php';
 
 class Balance {
+    private $reduced = true;
     private $filename = 'balance.csv';
     private $comments = array();
 
-    public function __construct() {
+    public function __construct($reduced=true) {
+        $this->reduced = $reduced;
         $filename = $this->getFilename();
         $this->writeData($filename);
     }
 
-    public function getFilename() {
+    public function getPath() {
         global $config;
-        $cur_dir = $config['data_directory']."/".date("Y");
+        $cur_dir = $config['data_directory']."/".$this->year;
         if(!is_dir($cur_dir)) {
-            print($cur_dir);
-            mkdir($cur_dir);
+            return "";
         }
-        $cur_dir .= "/".date("F");
+        $cur_dir .= "/".$this->month;
         if(!is_dir($cur_dir)) {
-            print($cur_dir);
-            mkdir($cur_dir);
+            return "";
         }
-        $cur_dir .= "/".date("d");
+        $cur_dir .= "/".$this->day;
         if(!is_dir($cur_dir)) {
-            print($cur_dir);
-            mkdir($cur_dir);
+            return "";
         }
+        return $cur_dir;
+    }
+
+    public function getFilename() {
+        
 
         $filename = $cur_dir.'/'.$this->filename;
         return $filename;
