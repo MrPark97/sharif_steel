@@ -228,4 +228,38 @@ function getMonths() {
     return $months;
 }
 
+function getUserRole() {
+    // Load all configuration options
+    /** @var array $config */
+    global $config;
+    $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $data = $conn->query("SELECT * FROM sharif_waiting_roles WHERE username='$username'")->fetchAll();
+    if(count($data) == 1) {
+        try {
+            $sql = "INSERT INTO sharif_users (id, name, role, username) VALUES (:id, :name, :role, :username)";
+            $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $sth->execute(array(':id' => $user_id, 'name' => $name, ':role' => $data[0]['role'], ':username' => $username));
+
+            $user_role = $data[0]['role'];
+            $conn->exec("DELETE FROM sharif_waiting_roles WHERE username='$username'");
+            return $user_role;
+        } catch(PDOException $e) {
+            $answer_text = 'Ошибка базы данных';
+        } catch (Exception $e) {
+            // not a MySQL exception
+            $e->getMessage();
+        }
+    } else {
+        $data = $conn->query("SELECT * FROM sharif_users WHERE id=$user_id")->fetchAll();
+        if(count($data) == 1) {
+            $user_role = $data[0]['role'];
+            return $user_role;
+        }
+    }
+
+    return -1;
+}
+
 ?>
