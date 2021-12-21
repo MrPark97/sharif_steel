@@ -27,7 +27,7 @@ class Purchases {
             $this->writeReducedFile();
         }
     }
-    
+
     public function getPath() {
         global $config;
         $cur_dir = $config['data_directory']."/".$this->year;
