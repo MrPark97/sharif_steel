@@ -30,7 +30,6 @@ return [
 
     // [Manager Only] Secret key required to access the webhook
     'secret' => 'super_secret',
-    'root' => $_SERVER['DOCUMENT_ROOT'],
 
     'data_directory' => 'data',
 
