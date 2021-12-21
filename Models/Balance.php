@@ -9,6 +9,7 @@ $config = require_once 'config.php';
 class Balance {
     private $reduced = true;
     private $filename = 'balance.csv';
+    private $reduced_filename = '_balance.csv';
     private $comments = array();
 
     public function __construct($reduced=true) {
@@ -19,25 +20,31 @@ class Balance {
 
     public function getPath() {
         global $config;
-        $cur_dir = $config['data_directory']."/".$this->year;
+        $cur_dir = $config['data_directory']."/".date("Y");
         if(!is_dir($cur_dir)) {
-            return "";
+            print($cur_dir);
+            mkdir($cur_dir);
         }
-        $cur_dir .= "/".$this->month;
+        $cur_dir .= "/".date("F");
         if(!is_dir($cur_dir)) {
-            return "";
+            print($cur_dir);
+            mkdir($cur_dir);
         }
-        $cur_dir .= "/".$this->day;
+        $cur_dir .= "/".date("d");
         if(!is_dir($cur_dir)) {
-            return "";
+            print($cur_dir);
+            mkdir($cur_dir);
         }
         return $cur_dir;
     }
 
     public function getFilename() {
-        
+        $cur_dir = $this->getPath();
 
         $filename = $cur_dir.'/'.$this->filename;
+        if($this->reduced) {
+            $filename = $cur_dir.'/'.$this->reduced_filename;
+        }
         return $filename;
     }
 
@@ -52,13 +59,21 @@ class Balance {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $data = $conn->query("SELECT * FROM sharif_items ORDER BY id")->fetchAll();
 
+        
         $csv_balance_header = "ID;Номенклатура;Количество;Стоимость;Комментарий\n";
+        if($this->reduced) {
+            $csv_balance_header = "ID;Номенклатура;Количество;Комментарий\n";
+        }
         $csv_balance_header = iconv("UTF-8", "windows-1251//IGNORE", $csv_balance_header);
 
         file_put_contents($filename, $csv_balance_header);
 
         foreach ($data as $row) {
-            $row_content = $row['id'].';'.$row['name'].';'.$row['amount'].';'.$row['price'];
+            $row_content = $row['id'].';'.$row['name'].';'.$row['amount'];
+            if(!$this->reduced) {
+                $row_content .= ';'.$row['price'];
+            }
+
             if(array_key_exists($row['id'], $this->comments)) {
                 foreach($this->comments[$row['id']] as $comment) {
                     $row_content .= ';'.$comment;

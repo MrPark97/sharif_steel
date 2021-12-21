@@ -26,7 +26,7 @@ class GetbalanceCommand extends UserCommand
 
     public function execute(): ServerResponse
     {
-        global $config;   
+        global $config;
         $message = $this->getMessage();            // Get Message object
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
@@ -34,8 +34,19 @@ class GetbalanceCommand extends UserCommand
         $user_id    = $from->getId();
         $username = "@".$from->getUsername();
         $name = $from->getFirstName();
+
+        $user_role = getUserRole($username, $user_id, $name);
+        $reduced = true;
+
+        if($user_role < 1 || $user_role > 5) {
+            return Request::emptyResponse();
+        }
+
+        if($user_role != 4 && $user_role != 5) {
+            $reduced = false;
+        }
         
-        $balance = new Balance();
+        $balance = new Balance($reduced);
 
         $data = [                                  // Set up the new message data
             'chat_id' => $chat_id,                 // Set Chat ID to send the message to

@@ -34,6 +34,19 @@ class GetpurchasesCommand extends UserCommand
         $user_id = $from->getId();
         $username = "@".$from->getUsername();
         $name = $from->getFirstName();
+
+        $user_role = getUserRole($username, $user_id, $name);
+        $reduced = true;
+
+        if($user_role < 1 || $user_role > 6 || $user_role == 4) {
+            return Request::emptyResponse();
+        }
+
+        if($user_role != 5) {
+            $reduced = false;
+        }
+
+
         $message_text = $message->text;
         $clean_msg_text = mb_substr($message_text, mb_strlen($this->usage)+1);
 
@@ -49,7 +62,7 @@ class GetpurchasesCommand extends UserCommand
             if(count($cleaned_purchases_params) == 1) {
                 $purchases_date = $cleaned_purchases_params[0];
                 if(validateDate($purchases_date)) {
-                    $purchases = new Purchases($purchases_date, true);
+                    $purchases = new Purchases($purchases_date, $reduced);
                     if($purchases->getFilename() == "") {
                         return Request::emptyResponse();
                     }
@@ -70,7 +83,7 @@ class GetpurchasesCommand extends UserCommand
             }
         }
 
-        $purchases = new Purchases(date("d.m.Y"), false);
+        $purchases = new Purchases(date("d.m.Y"), $reduced);
         if($purchases->getFilename() == "") {
             return Request::emptyResponse();
         }
