@@ -26,7 +26,6 @@ class GetitemsCommand extends UserCommand
         $from       = $message->getFrom();
         $user_id    = $from->getId();
         $username = "@".$from->getUsername();
-        $name = $from->getFirstName();
 
         $user_role = getUserRole($username, $user_id);
         
