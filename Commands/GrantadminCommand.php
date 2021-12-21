@@ -8,6 +8,8 @@ use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Entities\ServerResponse;
 
+require_once "utils.php";
+
 class GrantadminCommand extends UserCommand
 {
     protected $name = 'grantadmin';                      // Your command's name
@@ -15,30 +17,43 @@ class GrantadminCommand extends UserCommand
     protected $usage = '/grantadmin';                    // Usage of your command
     protected $version = '1.0.0';                       // Version of your command
 
+
     public function execute(): ServerResponse
     {
         $message = $this->getMessage();            // Get Message object
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
         $message_text = $message->text;
-        $username = mb_substr($message_text,mb_strlen($this->usage)+1);   // 19 - длина названия комманды
-        $answer_text = "Роль администратора $username выдана";
-
-        try {
-            // Load all configuration options
-            /** @var array $config */
-            $config = require __DIR__ . '/../config.php';
-            $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "INSERT INTO sharif_waiting_roles (username, role) VALUES (:username, :role)";
-            $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            $sth->execute(array(':username' => $username, ':role' => 1));
-        } catch(PDOException $e) {
-            $answer_text = 'Ошибка базы данных';
-        } catch (Exception $e) {
-            // not a MySQL exception
-            $e->getMessage();
+        $accountant_username = mb_substr($message_text,mb_strlen($this->usage)+1);   // 19 - длина названия комманды
+        $from       = $message->getFrom();
+        $user_id    = $from->getId();
+        $username = "@".$from->getUsername();
+        $answer_text = "Роль администратора $accountant_username выдана";
+        
+        $user_role = getUserRole($username, $user_id);
+        if($user_role != 1) {
+            return Request::emptyResponse(); 
+        }
+        if(!isValidUsername($accountant_username)) {
+            $answer_text = "Неверно указан @username";
+        }
+        else {
+            try {
+                // Load all configuration options
+                /** @var array $config */
+                $config = require __DIR__ . '/../config.php';
+                $conn = new PDO("mysql:host=" . $config['mysql']['host'].";dbname=" . $config['mysql']['database'], $config['mysql']['user'], $config['mysql']['password']);
+                // set the PDO error mode to exception
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $sql = "INSERT INTO sharif_waiting_roles (username, role) VALUES (:username, :role)";
+                $sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $sth->execute(array(':username' => $accountant_username, ':role' => 1));
+            } catch(PDOException $e) {
+                $answer_text = 'Ошибка базы данных';
+            } catch (Exception $e) {
+                // not a MySQL exception
+                $e->getMessage();
+            }
         }
         
         $data = [                                  // Set up the new message data

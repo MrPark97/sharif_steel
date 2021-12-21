@@ -268,4 +268,8 @@ function getUserRole($username, $user_id) {
     return -1;
 }
 
+function isValidUsername($username) {
+    return preg_match('/^@(?=\w{5,64})$/', $username);
+}
+
 ?>
