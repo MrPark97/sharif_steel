@@ -28,9 +28,10 @@ class GrantadminCommand extends UserCommand
         $from       = $message->getFrom();
         $user_id    = $from->getId();
         $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
         $answer_text = "Роль администратора $accountant_username выдана";
         
-        $user_role = getUserRole($username, $user_id);
+        $user_role = getUserRole($username, $user_id, $name);
         if($user_role != 1) {
             return Request::emptyResponse(); 
         }

@@ -23,13 +23,14 @@ class GrantdirectorCommand extends UserCommand
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
         $message_text = $message->text;
-        $accountant_username = mb_substr($message_text,15);   // 15 - длина названия комманды
+        $accountant_username = mb_substr($message_text,mb_strlen($this->usage)+1);   // 15 - длина названия комманды
         $from       = $message->getFrom();
         $user_id    = $from->getId();
         $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
         $answer_text = "Роль директора $accountant_username выдана";
 
-        $user_role = getUserRole($username, $user_id);
+        $user_role = getUserRole($username, $user_id, $name);
         if($user_role != 1) {
             return Request::emptyResponse(); 
         }
