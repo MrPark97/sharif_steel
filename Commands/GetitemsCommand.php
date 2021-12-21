@@ -28,7 +28,7 @@ class GetitemsCommand extends UserCommand
         $username = "@".$from->getUsername();
         $name = $from->getFirstName();
 
-        $user_role = getUserRole();
+        $user_role = getUserRole($username, $user_id);
         
         if($user_role != 1) {
             $data = [                                  // Set up the new message data

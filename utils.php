@@ -228,7 +228,7 @@ function getMonths() {
     return $months;
 }
 
-function getUserRole() {
+function getUserRole($username, $user_id) {
     // Load all configuration options
     /** @var array $config */
     global $config;
