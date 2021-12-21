@@ -50,7 +50,7 @@ class GetbalanceCommand extends UserCommand
 
         $data = [                                  // Set up the new message data
             'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-            'document'=> Request::encodeFile($balance->getFilename()),
+            'document'=> Request::encodeFile($config['root'].'/'.$balance->getFilename()),
         ];
 
         return Request::sendDocument($data);        // Send message!

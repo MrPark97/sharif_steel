@@ -25,16 +25,17 @@
 
 return [
     // Add you bot's API key and name
-    'api_key'      => '2083989238:AAHoHH3xD8Pd8C48AY6aWKe0SrQhHqSMm3o',
+    'api_key' => '2083989238:AAHoHH3xD8Pd8C48AY6aWKe0SrQhHqSMm3o',
     'bot_username' => 'sharif_steel_bot', // Without "@"
 
     // [Manager Only] Secret key required to access the webhook
-    'secret'       => 'super_secret',
+    'secret' => 'super_secret',
+    'root' => $_SERVER['DOCUMENT_ROOT'],
 
     'data_directory' => 'data',
 
     // When using the getUpdates method, this can be commented out
-    'webhook'      => [
+    'webhook' => [
         'url' => 'https://sharif-steel.herokuapp.com/hook.php',
         // Use self-signed certificate
         // 'certificate'     => __DIR__ . '/path/to/your/certificate.crt',
@@ -43,9 +44,9 @@ return [
     ],
 
     // All command related configs go here
-    'commands'     => [
+    'commands' => [
         // Define all paths for your custom commands
-        'paths'   => [
+        'paths' => [
             __DIR__ . '/Commands',
         ],
         // Here you can set any command-specific parameters
@@ -60,7 +61,7 @@ return [
     ],
 
     // Define all IDs of admin users
-    'admins'       => [
+    'admins' => [
         // 123,
     ],
 
@@ -71,9 +72,9 @@ return [
     //     'password' => 'abracadabra_2016!',
     //     'database' => 'sharif_steel_dev',
     // ],
-    'mysql'        => [
-        'host'     => 'eu-cdbr-west-02.cleardb.net',
-        'user'     => 'be10221a40594e',
+    'mysql' => [
+        'host' => 'eu-cdbr-west-02.cleardb.net',
+        'user' => 'be10221a40594e',
         'password' => '03672d9d',
         'database' => 'heroku_07fd7bf14527278',
     ],
@@ -86,13 +87,13 @@ return [
     // ],
 
     // Set custom Upload and Download paths
-    'paths'        => [
+    'paths' => [
         'download' => __DIR__ . '/Download',
-        'upload'   => __DIR__ . '/Upload',
+        'upload' => __DIR__ . '/Upload',
     ],
 
     // Requests Limiter (tries to prevent reaching Telegram API limits)
-    'limiter'      => [
+    'limiter' => [
         'enabled' => true,
     ],
 ];
