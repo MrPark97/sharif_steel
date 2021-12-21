@@ -57,9 +57,15 @@ class GenericmessageCommand extends SystemCommand
     public function execute(): ServerResponse
     {
         $message = $this->getMessage();
-        $from = $message->getFrom();
-        $user_id = $from->getId();
+        $from       = $message->getFrom();
+        $user_id    = $from->getId();
         $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
+
+        $user_role = getUserRole($username, $user_id, $name);
+        if($user_role < 1 || $user_role > 6) {
+            return Request::emptyResponse(); 
+        }
 
         if($reply_to_message = $message->getReplyToMessage()) {
             if($reply_to_message_text = $reply_to_message->getText()) {

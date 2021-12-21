@@ -70,6 +70,13 @@ class UnbookCommand extends UserCommand
 
         $from       = $message->getFrom();
         $user_id    = $from->getId();
+        $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
+
+        $user_role = getUserRole($username, $user_id, $name);
+        if($user_role != 1 && $user_role != 4) {
+            return Request::emptyResponse(); 
+        }
 
         $error_data = [                                  // Set up the new message data
             'chat_id' => $chat_id,                 // Set Chat ID to send the message to

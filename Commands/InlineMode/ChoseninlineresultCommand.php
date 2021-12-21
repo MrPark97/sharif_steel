@@ -48,6 +48,15 @@ class ChoseninlineresultCommand extends SystemCommand
         // Information about the chosen result is returned.
         $inline_query = $this->getChosenInlineResult();
         $query        = $inline_query->getQuery();
+        $from       = $inline_query->getFrom();
+        $user_id    = $from->getId();
+        $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
+        
+        $user_role = getUserRole($username, $user_id, $name);
+        if($user_role < 1 || $user_role > 6) {
+            return Request::emptyResponse(); 
+        }
 
         return parent::execute();
     }

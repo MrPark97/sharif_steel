@@ -66,6 +66,13 @@ class CallbackqueryCommand extends SystemCommand
         $message = $callback_query->getMessage();            // Get Message object
         $from       = $callback_query->getFrom();
         $user_id    = $from->getId();
+        $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
+
+        $user_role = getUserRole($username, $user_id, $name);
+        if($user_role < 1 || $user_role > 6) {
+            return Request::emptyResponse(); 
+        }
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
 

@@ -24,6 +24,16 @@ class ViewitemsCommand extends UserCommand
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
 
+        $from       = $message->getFrom();
+        $user_id    = $from->getId();
+        $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
+
+        $user_role = getUserRole($username, $user_id, $name);
+        if($user_role != 1) {
+            return Request::emptyResponse(); 
+        }
+
         // and somewhere latr:
         $all_items = getItems(0);
 

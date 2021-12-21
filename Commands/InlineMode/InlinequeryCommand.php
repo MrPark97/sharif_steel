@@ -55,6 +55,15 @@ class InlinequeryCommand extends SystemCommand
     {
         $inline_query = $this->getInlineQuery();
         $query        = $inline_query->getQuery();
+        $from       = $inline_query->getFrom();
+        $user_id    = $from->getId();
+        $username = "@".$from->getUsername();
+        $name = $from->getFirstName();
+        
+        $user_role = getUserRole($username, $user_id, $name);
+        if($user_role < 1 || $user_role > 6) {
+            return Request::emptyResponse(); 
+        }
 
         $results = [];
         if($query != '') {
