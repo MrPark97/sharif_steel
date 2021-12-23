@@ -35,7 +35,7 @@ return [
 
     // When using the getUpdates method, this can be commented out
     'webhook' => [
-        'url' => 'https://sharif-steel.herokuapp.com/hook.php',
+        'url' => 'https://mrpark.uz/hook.php',
         // Use self-signed certificate
         // 'certificate'     => __DIR__ . '/path/to/your/certificate.crt',
         // Limit maximum number of connections
@@ -72,10 +72,10 @@ return [
     //     'database' => 'sharif_steel_dev',
     // ],
     'mysql' => [
-        'host' => 'eu-cdbr-west-02.cleardb.net',
-        'user' => 'be10221a40594e',
-        'password' => '03672d9d',
-        'database' => 'heroku_07fd7bf14527278',
+        'host' => 'localhost',
+        'user' => 'mrparkuz_1',
+        'password' => 'abracadabra_2016!',
+        'database' => 'mrparkuz_sharif_steel',
     ],
 
     // Logging (Debug, Error and Raw Updates)

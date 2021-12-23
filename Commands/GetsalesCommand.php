@@ -63,7 +63,7 @@ class GetsalesCommand extends UserCommand
             if (count($cleaned_sales_params) == 1) {
                 $sales_date = $cleaned_sales_params[0];
                 if (validateDate($sales_date)) {
-                    $sales = new Sales(date("d.m.Y"), $clean_username, $reduced);
+                    $sales = new Sales($sales_date, $clean_username, $reduced);
                     $filenames = $sales->getFilenames();
 
                     if ($sales->getFilename() == "" || count($filenames) == 0) {
