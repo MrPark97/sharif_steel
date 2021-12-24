@@ -13,8 +13,8 @@ require_once "utils.php";
 class GrantdirectorCommand extends UserCommand
 {
     protected $name = 'grantdirector';                      // Your command's name
-    protected $description = 'Grant Director Role';              // Your command description
-    protected $usage = '/grantdirector';                    // Usage of your command
+    protected $description = 'Выдача роли директора';              // Your command description
+    protected $usage = '/grantdirector <@username>';                    // Usage of your command
     protected $version = '1.0.0';                       // Version of your command
 
     public function execute(): ServerResponse
@@ -23,7 +23,7 @@ class GrantdirectorCommand extends UserCommand
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
         $message_text = $message->text;
-        $accountant_username = mb_substr($message_text,mb_strlen($this->usage)+1);   // 15 - длина названия комманды
+        $accountant_username = mb_substr($message_text,mb_strlen($this->name)+2);   // 15 - длина названия комманды
         $from       = $message->getFrom();
         $user_id    = $from->getId();
         $username = "@".$from->getUsername();

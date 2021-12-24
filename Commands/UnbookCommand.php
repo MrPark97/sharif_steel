@@ -43,7 +43,7 @@ class UnbookCommand extends UserCommand
     /**
      * @var string
      */
-    protected $description = 'Unbook item';
+    protected $description = 'Удаление брони с товара';
 
     /**
      * @var string

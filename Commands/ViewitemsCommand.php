@@ -14,7 +14,7 @@ require_once "utils.php";
 class ViewitemsCommand extends UserCommand
 {
     protected $name = 'viewitems';                      // Your command's name
-    protected $description = 'View Items';              // Your command description
+    protected $description = 'Показать все товара сообщением в чате';              // Your command description
     protected $usage = '/viewitems';                    // Usage of your command
     protected $version = '1.0.0';                       // Version of your command
 

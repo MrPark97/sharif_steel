@@ -20,8 +20,8 @@ use Models\Purchases;
 class GetpurchasesCommand extends UserCommand
 {
     protected $name = 'getpurchases';                      // Your command's name
-    protected $description = 'Get purchases';              // Your command description
-    protected $usage = '/getpurchases';                    // Usage of your command
+    protected $description = 'Получение файла с закупками за конкретную дату';              // Your command description
+    protected $usage = '/getpurchases <дд.мм.гггг>';                    // Usage of your command
     protected $version = '1.0.0';                      // Version of your command
 
     public function execute(): ServerResponse

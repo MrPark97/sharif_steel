@@ -71,7 +71,7 @@ return [
     'mysql'        => [
         'host'     => 'localhost',
         'user'     => 'root',
-        'password' => 'abracadabra_2016!',
+        'password' => '',
         'database' => 'sharif_steel_dev',
     ],
     // 'mysql' => [

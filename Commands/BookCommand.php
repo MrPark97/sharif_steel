@@ -46,7 +46,7 @@ class BookCommand extends UserCommand
     /**
      * @var string
      */
-    protected $usage = '/book <ID товара> <количество (кг)>';
+    protected $usage = '/book <ID товара> <Количество (кг)>';
 
     /**
      * @var string

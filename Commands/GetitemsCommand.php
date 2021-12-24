@@ -14,7 +14,7 @@ require_once "utils.php";
 class GetitemsCommand extends UserCommand
 {
     protected $name = 'getitems';                      // Your command's name
-    protected $description = 'Get Items';              // Your command description
+    protected $description = 'Получение файла со всеми товарами';              // Your command description
     protected $usage = '/getitems';                    // Usage of your command
     protected $version = '1.0.0';                      // Version of your command
 

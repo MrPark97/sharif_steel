@@ -17,8 +17,8 @@ require_once "Models/Sales.php";
 class GetsalesCommand extends UserCommand
 {
     protected $name = 'getsales'; // Your command's name
-    protected $description = 'Get sales'; // Your command description
-    protected $usage = '/getsales'; // Usage of your command
+    protected $description = 'Получение продаж за конкретную дату'; // Your command description
+    protected $usage = '/getsales <дд.мм.гггг>'; // Usage of your command
     protected $version = '1.0.0'; // Version of your command
 
     public function execute(): ServerResponse
@@ -49,7 +49,7 @@ class GetsalesCommand extends UserCommand
         }
 
         $message_text = $message->text;
-        $clean_msg_text = mb_substr($message_text, mb_strlen($this->usage) + 1);
+        $clean_msg_text = mb_substr($message_text, mb_strlen($this->name) + 2);
 
         if (mb_strlen($message_text) != mb_strlen($this->usage)) {
             $cleaned_sales_params = array();

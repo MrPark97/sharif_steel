@@ -13,8 +13,8 @@ require_once "utils.php";
 class DeleteemployeeCommand extends UserCommand
 {
     protected $name = 'deleteemployee';                      // Your command's name
-    protected $description = 'Delete Employee';              // Your command description
-    protected $usage = '/deleteemployee';                    // Usage of your command
+    protected $description = 'Удаление соотрудника из базы';              // Your command description
+    protected $usage = '/deleteemployee <@username>';                    // Usage of your command
     protected $version = '1.0.0';                       // Version of your command
 
     public function execute(): ServerResponse
@@ -23,7 +23,7 @@ class DeleteemployeeCommand extends UserCommand
 
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
         $message_text = $message->text;
-        $accountant_username = mb_substr($message_text,mb_strlen($this->usage)+1);;   // 16 - длина названия комманды
+        $accountant_username = mb_substr($message_text,mb_strlen($this->name)+2);;   // 16 - длина названия комманды
         $from       = $message->getFrom();
         $user_id    = $from->getId();
         $username = "@".$from->getUsername();

@@ -33,12 +33,12 @@ class HelpCommand extends UserCommand
     /**
      * @var string
      */
-    protected $description = 'Show bot commands help';
+    protected $description = 'Показать перечень по командам бота';
 
     /**
      * @var string
      */
-    protected $usage = '/help or /help <command>';
+    protected $usage = '/help или /help <название комманды>';
 
     /**
      * @var string
@@ -63,7 +63,7 @@ class HelpCommand extends UserCommand
 
         // If no command parameter is passed, show the list.
         if ($command_str === '') {
-            $text = '*Commands List*:' . PHP_EOL;
+            $text = '*Список команд*:' . PHP_EOL;
             foreach ($user_commands as $user_command) {
                 $text .= '/' . $user_command->getName() . ' - ' . $user_command->getDescription() . PHP_EOL;
             }
@@ -75,7 +75,7 @@ class HelpCommand extends UserCommand
                 }
             }
 
-            $text .= PHP_EOL . 'For exact command help type: /help <command>';
+            $text .= PHP_EOL . 'Чтобы получить точное описание команды, введите:' . PHP_EOL . ' /help <название команды>';
 
             return $this->replyToChat($text, ['parse_mode' => 'markdown']);
         }
@@ -85,11 +85,10 @@ class HelpCommand extends UserCommand
             $command = $all_commands[$command_str];
 
             return $this->replyToChat(sprintf(
-                'Command: %s (v%s)' . PHP_EOL .
-                'Description: %s' . PHP_EOL .
-                'Usage: %s',
+                'Название команды: %s' . PHP_EOL .
+                'Описание команды: %s' . PHP_EOL .
+                'Использование команды: %s',
                 $command->getName(),
-                $command->getVersion(),
                 $command->getDescription(),
                 $command->getUsage()
             ), ['parse_mode' => 'markdown']);

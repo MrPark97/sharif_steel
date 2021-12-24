@@ -11,8 +11,8 @@ use PDOException;
 class CreateitemCommand extends UserCommand
 {
     protected $name = 'createitem'; // Your command's name
-    protected $description = 'Create Item'; // Your command description
-    protected $usage = '/createitem'; // Usage of your command
+    protected $description = 'Добавление нового товара в базу'; // Your command description
+    protected $usage = '/createitem <ID товара> <Номенклатура>'; // Usage of your command
     protected $version = '1.0.0'; // Version of your command
 
     public function execute(): ServerResponse
@@ -32,7 +32,7 @@ class CreateitemCommand extends UserCommand
             return Request::emptyResponse();
         }
 
-        $id_and_name_str = mb_substr($message_text, 12); // 12 - длина названия комманды
+        $id_and_name_str = mb_substr($message_text, mb_strlen($this->name)+2); // 12 - длина названия комманды
         $id_and_name = explode(' ', $id_and_name_str, 2); // разбиваем строки на ID и name
 
         $id_and_name[0] = (int) $id_and_name[0];

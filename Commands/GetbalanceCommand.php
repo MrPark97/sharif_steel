@@ -20,7 +20,7 @@ use Models\Balance;
 class GetbalanceCommand extends UserCommand
 {
     protected $name = 'getbalance';                      // Your command's name
-    protected $description = 'Get stock leftovers';              // Your command description
+    protected $description = 'Получение файла с остатками';              // Your command description
     protected $usage = '/getbalance';                    // Usage of your command
     protected $version = '1.0.0';                      // Version of your command
 
