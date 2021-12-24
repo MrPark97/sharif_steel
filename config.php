@@ -25,8 +25,11 @@
 
 return [
     // Add you bot's API key and name
-    'api_key' => '2083989238:AAHoHH3xD8Pd8C48AY6aWKe0SrQhHqSMm3o',
-    'bot_username' => 'sharif_steel_bot', // Without "@"
+    //'api_key' => '2083989238:AAHoHH3xD8Pd8C48AY6aWKe0SrQhHqSMm3o',
+    //'bot_username' => 'sharif_steel_bot', // Without "@"
+    'api_key' => '2084818822:AAERJocLaQFBsb3AS-wW3IIoRjg21Riw__E',
+    'bot_username' => 'shareef_steel_bot', // Without "@"
+
 
     // [Manager Only] Secret key required to access the webhook
     'secret' => 'super_secret',
@@ -65,18 +68,18 @@ return [
     ],
 
     // Enter your MySQL database credentials
-    // 'mysql'        => [
-    //     'host'     => 'localhost',
-    //     'user'     => 'root',
-    //     'password' => 'abracadabra_2016!',
-    //     'database' => 'sharif_steel_dev',
-    // ],
-    'mysql' => [
-        'host' => 'localhost',
-        'user' => 'mrparkuz_1',
+    'mysql'        => [
+        'host'     => 'localhost',
+        'user'     => 'root',
         'password' => 'abracadabra_2016!',
-        'database' => 'mrparkuz_sharif_steel',
+        'database' => 'sharif_steel_dev',
     ],
+    // 'mysql' => [
+    //     'host' => 'localhost',
+    //     'user' => 'mrparkuz_1',
+    //     'password' => 'abracadabra_2016!',
+    //     'database' => 'mrparkuz_sharif_steel',
+    // ],
 
     // Logging (Debug, Error and Raw Updates)
     // 'logging'  => [
