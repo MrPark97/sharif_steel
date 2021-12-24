@@ -41,12 +41,12 @@ class BookCommand extends UserCommand
     /**
      * @var string
      */
-    protected $description = 'Book item';
+    protected $description = 'Бронирование товара';
 
     /**
      * @var string
      */
-    protected $usage = '/book';
+    protected $usage = '/book <ID товара> <количество (кг)>';
 
     /**
      * @var string
@@ -64,7 +64,7 @@ class BookCommand extends UserCommand
         $message = $this->getMessage();                           // Get Message object
         $chat_id = $message->getChat()->getId();                  // Get the current Chat ID
         $message_text = $message->text;
-        $clean_msg_text = mb_substr($message_text, mb_strlen($this->usage)+1);
+        $clean_msg_text = mb_substr($message_text, mb_strlen($this->name)+2);
 
         $from       = $message->getFrom();
         $user_id    = $from->getId();
