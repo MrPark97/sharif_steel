@@ -24,8 +24,9 @@ class CreateitemCommand extends UserCommand
         $from = $message->getFrom();
         $user_id = $from->getId();
         $username = "@" . $from->getUsername();
+        $name = $from->getFirstName();
 
-        $user_role = getUserRole($username, $user_id);
+        $user_role = getUserRole($username, $user_id, $name);
 
         if ($user_role != 1) {
             return Request::emptyResponse();
